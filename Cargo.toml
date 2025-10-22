@@ -1,0 +1,11 @@
+[package]
+name = "spack"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+glazer = { path = "../blaze/crates/glazer" }
+rast = { path = "../blaze/crates/rast" }
+tint = { path = "../blaze/crates/tint" }
+
+image = "0.25.8"
