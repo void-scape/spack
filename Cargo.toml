@@ -3,9 +3,21 @@ name = "spack"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
 glazer = { path = "../blaze/crates/glazer" }
 rast = { path = "../blaze/crates/rast" }
-tint = { path = "../blaze/crates/tint" }
+tint = { path = "../blaze/crates/tint", features = ["serde"] }
 
 image = "0.25.8"
+serde = { version = "1.0", features = ["derive"] }
+bincode = { version = "2.0", features = ["serde"] }
+
+# Run with optimizations while allowing debug_assert because 
+# no optimizations is too slow and compile times are trivial
+[profile.dev.package."*"]
+opt-level = 3
+[profile.dev]
+opt-level = 3
