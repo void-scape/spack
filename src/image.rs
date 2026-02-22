@@ -13,7 +13,7 @@ impl Default for ImageMemory {
     fn default() -> Self {
         let raw: Vec<_> = std::fs::read_dir("data")
             .unwrap()
-            .take(2)
+            .take(5)
             .map(|entry| {
                 let path = entry.unwrap().path();
                 let path_str = path.to_str().unwrap();
@@ -58,7 +58,7 @@ pub fn process_image(image: &Image<Srgb>) -> ProcessedImage {
 
     let sigma = 2f32;
     let dilate_size = (3.0 * sigma).ceil() as usize;
-    let luminance_percentile = 0.95;
+    let luminance_percentile = 0.9999;
 
     let raw = image.clone();
     let log_f32: Image<f32> = process::laplacian_of_gaussian(&raw, sigma);
@@ -70,8 +70,14 @@ pub fn process_image(image: &Image<Srgb>) -> ProcessedImage {
     let mut local_max = log.clone();
     local_max.pixels.fill(Srgb::from_rgb(0, 0, 0));
     for (x, y, l) in local_max_points.iter() {
-        let i = *y as usize * local_max.width + *x as usize;
-        local_max.pixels[i] = LinearRgb::from_rgb(*l, *l, *l).to_srgb();
+        for dy in 0..5 {
+            for dx in 0..5 {
+                let y = (*y as usize + dy).min(local_max.height - 1);
+                let x = (*x as usize + dx).min(local_max.width - 1);
+                let i = y * local_max.width + x;
+                local_max.pixels[i] = LinearRgb::from_rgb(*l, *l, *l).to_srgb();
+            }
+        }
     }
 
     ProcessedImage {

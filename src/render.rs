@@ -27,7 +27,7 @@ pub fn render(frame_buffer: &mut [Srgb], width: usize, height: usize, memory: &M
             processed.log.height,
             &processed.local_max_points,
             &processed2.local_max_points,
-            0.001,
+            0.0015,
         );
 
         render_image(frame_buffer, width, height, &processed.raw);

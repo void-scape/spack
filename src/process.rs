@@ -77,7 +77,7 @@ pub fn peak_local_max<In1: Luminance + Copy, In2: Luminance + Copy>(
             let i = y * width + x;
             let in_pixel = image.pixels[i];
             let max_pixel = max.pixels[i];
-            if in_pixel.luminance() == max_pixel.luminance()
+            if (in_pixel.luminance() - max_pixel.luminance()).abs() < 0.0001
                 && max_pixel.luminance() >= min_luminance
             {
                 points.push((x as f32, y as f32, max_pixel.luminance()));
